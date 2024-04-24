@@ -1,0 +1,1773 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="new_header_template_id">
+            <div class="header" style="font-size: 9.5pt;">
+                <div style="padding-top: 10px;"/>
+                <div t-attf-style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+                    <img t-att-src="'/custom_report/static/src/eco_ng_header.png'"
+                         style="max-height:150pt;max-width:150%"/>
+                </div>
+                <div class="row mb8" style="border-bottom: 2px solid #E1e3e4;">
+                    <div class="col-6">
+                        <div name="company_address" class="float-end mb4">
+                            <ul class="list-unstyled text-right" style="float: left; width: 100;">
+                                <li style="text-align: left; padding-left:20px;  margin-bottom: -15px;">
+                                    <div style="padding-top: 160px;"/>
+                                    <t t-if="o.company_id.street">
+                                        <span t-field="o.company_id.street"/>
+                                    </t>
+                                    <t t-if="o.company_id.street2">
+                                        <span t-field="o.company_id.street2"/>
+                                    </t>
+                                    <t t-if="o.company_id.city">
+                                        <span t-field="o.company_id.city"/>
+                                    </t>
+                                    <t t-if="o.company_id.state_id">
+                                        <span t-field="o.company_id.state_id"/>
+                                    </t>
+                                    <t t-if="o.company_id.zip">
+                                        <span t-field="o.company_id.zip"/>
+                                    </t>
+                                    <t t-if="o.company_id.country_id">
+                                        <span t-field="o.company_id.country_id"/>
+                                    </t>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-6 text-end mb4">
+                        <img t-att-src="image_data_uri(o.company_id.logo)"
+                             style="max-height:150pt;max-width:150%; margin-top:5px; margin-bottom: -15px;"
+                             alt="Company Logo"/>
+                    </div>
+                </div>
+            </div>
+            <div class="article o_report_layout_standard">
+                <t t-raw="0"/>
+            </div>
+
+
+            <div class="footer" style="font-size: 9.5pt;">
+                <table width="100%" class="table-borderless">
+                    <tr style="border-top: 2px solid #E1e3e4;">
+                        <td width="25%" style="padding-left:20px; padding-top: 5px;">eco-NG GmbH</td>
+                        <td width="25%" style="padding-left:20px; padding-top: 5px;">0043 720 145 007
+                        </td>
+                        <td width="25%" style="padding-left:40px; padding-top: 5px;">USt: ATU80342318
+                        </td>
+                        <td width="25%" style="padding-left:30px; padding-top: 5px;">Oberbank</td>
+                    </tr>
+                    <tr>
+                        <td width="25%" style="padding-left:20px;">Taschelried 19</td>
+                        <td width="25%" style="padding-left:20px;">office@eco -ng.com
+                        </td>
+                        <td width="25%" style="padding-left:40px;">FN Nr: 621034 k
+                        </td>
+                        <td width="25%" style="padding-left:30px;">IBAN: AT19 1500 0009 2127
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="25%" style="padding-left:20px;">4400 Steyr</td>
+                        <td width="25%" style="padding-left:20px;">www.eco-ng.com
+                        </td>
+                        <td width="25%" style="padding-left:40px;">
+                        </td>
+                        <td width="25%" style="padding-left:30px;">6572</td>
+                    </tr>
+                    <tr>
+                        <td width="25%" style="padding-left:20px;">Österreich</td>
+                        <td width="25%" style="padding-left:20px;">Landesgericht Steyr
+                        </td>
+                        <td width="25%" style="padding-left:40px;">
+                        </td>
+                        <td width="25%" style="padding-left:30px;">BIC: OBKLAT2L</td>
+                    </tr>
+                </table>
+                <br/>
+                <div t-if="report_type == 'pdf'" style="text-align: right;">
+                    Page:
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
+                </div>
+            </div>
+        </template>
+
+
+        <template id="custom_report_temp_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="custom_report.new_header_template_id">
+                        <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                        <div style="width:100%; float:left; padding-left:20px">
+                            <span t-field="o.partner_id.name"/>
+                            <br/>
+                            <span t-field="o.partner_id.street"/>
+                            <br/>
+                            <span t-field="o.partner_id.city"/>
+                            <span t-field="o.partner_id.state_id.name"/>
+                            <span t-field="o.partner_id.zip"/>
+                            <br/>
+                            <span t-field="o.partner_id.country_id.name"/>
+                            <br/>
+                            <t t-if="o.partner_id.vat">
+                                Tax ID:
+                                <span t-field="o.partner_id.vat"/>
+                            </t>
+                            <br/>
+                        </div>
+                        <div class="mt-5 clearfix" style="padding-left: 20px; padding-right: 20px;">
+                            <div class="page">
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <h2>
+                                    <span t-if="not proforma"/>
+                                    <span t-else="">PROFORMA</span>
+                                    <span t-if="o.move_type == 'out_invoice' and o.state == 'posted'"
+                                          style="color: rgb(37, 150, 190);">Invoice
+                                    </span>
+                                    <span t-elif="o.move_type == 'out_invoice' and o.state == 'draft'"
+                                          style="color: rgb(37, 150, 190);">Draft
+                                        Invoice
+                                    </span>
+                                    <span t-elif="o.move_type == 'out_invoice' and o.state == 'cancel'"
+                                          style="color: rgb(37, 150, 190);">Cancelled
+                                        Invoice
+                                    </span>
+                                    <span t-elif="o.move_type == 'out_refund' and o.state == 'posted'"
+                                          style="color: rgb(37, 150, 190);">Credit Note
+                                    </span>
+                                    <span t-elif="o.move_type == 'out_refund' and o.state == 'draft'"
+                                          style="color: rgb(37, 150, 190);">Draft Credit
+                                        Note
+                                    </span>
+                                    <span t-elif="o.move_type == 'out_refund' and o.state == 'cancel'"
+                                          style="color: rgb(37, 150, 190);">Cancelled
+                                        Credit Note
+                                    </span>
+                                    <span t-elif="o.move_type == 'in_refund'"
+                                          style="color: rgb(37, 150, 190);">
+                                        Vendor
+                                        Credit
+                                        Note
+                                    </span>
+                                    <span t-elif="o.move_type == 'in_invoice'"
+                                          style="color: rgb(37, 150, 190);">
+                                        Vendor
+                                        Bill
+                                    </span>
+                                    <span t-if="o.name != '/'" t-field="o.name"
+                                          style="color: rgb(37, 150, 190);">
+                                        INV/2023/0001
+                                    </span>
+                                </h2>
+                                <div class="oe_structure"/>
+                                <div id="informations" class="row mt-3 mb-1">
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.invoice_date" name="invoice_date">
+                                        <t t-if="o.move_type == 'out_invoice'">
+                                            <strong>
+                                                <font style="color: rgb(37, 150, 190);">Invoice Date:</font>
+                                            </strong>
+                                        </t>
+                                        <t t-elif="o.move_type == 'out_refund'">
+                                            <strong>
+                                                <font style="color: rgb(37, 150, 190);">Credit Note Date:
+                                                </font>
+                                            </strong>
+                                        </t>
+                                        <t t-elif="o.move_type == 'out_receipt'">
+                                            <strong>
+                                                <font style="color: rgb(37, 150, 190);">Receipt Date:</font>
+                                            </strong>
+                                        </t>
+                                        <t t-else="">
+                                            <strong>
+                                                <font style="color: rgb(37, 150, 190);">Date:</font>
+                                            </strong>
+                                        </t>
+                                        <br/>
+                                        <span t-field="o.invoice_date">2023-09-12</span>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.invoice_date_due and o.move_type == 'out_invoice' and o.state == 'posted'"
+                                         name="due_date">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Due Date:</font>
+                                        </strong>
+                                        <br/>
+                                        <span t-field="o.invoice_date_due">2023-10-31</span>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.delivery_date" name="delivery_date">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Delivery Date:</font>
+                                        </strong>
+                                        <br/>
+                                        <span t-field="o.delivery_date">2023-09-25</span>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.invoice_origin" name="origin">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Source:</font>
+                                        </strong>
+                                        <br/>
+                                        <span t-field="o.invoice_origin">SO123</span>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.partner_id.ref" name="customer_code">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Customer Code:</font>
+                                        </strong>
+                                        <br/>
+                                        <span t-field="o.partner_id.ref"/>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.ref" name="reference">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Reference:</font>
+                                        </strong>
+                                        <br/>
+                                        <span t-field="o.ref">INV/2023/00001</span>
+                                    </div>
+                                    <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
+                                         t-if="o.invoice_incoterm_id" name="incoterm_id">
+                                        <strong>
+                                            <font style="color: rgb(37, 150, 190);">Incoterm:</font>
+                                        </strong>
+                                        <br/>
+                                        <p t-if="o.incoterm_location">
+                                            <span t-field="o.invoice_incoterm_id.code"/>
+                                            <br/>
+                                            <span t-field="o.incoterm_location"/>
+                                        </p>
+                                        <span t-else="" t-field="o.invoice_incoterm_id.code" class="m-0"/>
+                                    </div>
+                                </div>
+                                <t t-set="display_discount"
+                                   t-value="any(l.discount for l in o.invoice_line_ids)"/>
+                                <div class="oe_structure"/>
+                                <table class="table table-sm o_main_table table-borderless"
+                                       name="invoice_line_table">
+                                    <thead>
+                                        <tr style="border-bottom:1px solid black;">
+                                            <th name="th_sequence" class="text-start">
+                                                <font style="color: rgb(37, 150, 190);">Seq.</font>
+                                            </th>
+                                            <th name="th_description" class="text-start">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Description
+                                                    </font>
+                                                </span>
+                                            </th>
+                                            <th name="th_quantity" class="text-end">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Quantity</font>
+                                                </span>
+                                            </th>
+                                            <th name="th_uom" class="text-start">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">UOM</font>
+                                                </span>
+                                            </th>
+                                            <th name="th_priceunit"
+                                                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Unit Price
+                                                    </font>
+                                                </span>
+                                            </th>
+                                            <th name="th_discount" t-if="display_discount"
+                                                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Disc.%</font>
+                                                </span>
+                                            </th>
+                                            <th name="th_taxes"
+                                                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Taxes</font>
+                                                </span>
+                                            </th>
+                                            <th name="th_subtotal" class="text-end">
+                                                <span>
+                                                    <font style="color: rgb(37, 150, 190);">Amount</font>
+                                                </span>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="invoice_tbody">
+                                        <t t-set="item_count" t-value="1"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                        <t t-set="current_total" t-value="0"/>
+                                        <t t-set="lines"
+                                           t-value="o.invoice_line_ids.sorted(key=lambda l: (-l.sequence, l.date, l.move_name, -l.id), reverse=True)"/>
+                                        <t t-foreach="lines" t-as="line">
+                                            <t t-set="current_subtotal"
+                                               t-value="current_subtotal + line.price_subtotal"/>
+                                            <t t-set="current_total"
+                                               t-value="current_total + line.price_total"/>
+                                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''"
+                                                style=" border-bottom: 1px solid black;">
+                                                <t t-if="line.display_type == 'product'"
+                                                   name="account_invoice_line_accountable">
+                                                    <td name="item_count" class="text-center">
+                                                        <span t-esc="item_count"/>
+                                                        <t t-set="item_count" t-value="item_count + 1"/>
+                                                    </td>
+                                                    <td name="account_invoice_line_name">
+                                                        <span t-if="line.name" t-field="line.name"
+                                                              t-options="{'widget': 'text'}">Bacon Burger
+                                                        </span>
+                                                    </td>
+                                                    <td name="td_quantity" class="text-end">
+                                                        <span t-field="line.quantity">3.00</span>
+                                                    </td>
+                                                    <td>
+                                                        <span t-esc="line.product_uom_id.name"/>
+                                                    </td>
+                                                    <td name="td_price_unit"
+                                                        t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                        <span class="text-nowrap" t-field="line.price_unit">
+                                                            9.00
+                                                        </span>
+                                                    </td>
+                                                    <td name="td_discount" t-if="display_discount"
+                                                        t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                        <span class="text-nowrap" t-field="line.discount">
+                                                            0
+                                                        </span>
+                                                    </td>
+                                                    <td name="td_taxes"
+                                                        t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                                                        <span t-out="', '.join(map(lambda x: (x.invoice_label or x.name), line.tax_ids))"
+                                                              id="line_tax_ids">Tax 15%
+                                                        </span>
+                                                    </td>
+                                                    <td name="td_subtotal" class="text-end o_price_total">
+                                                        <span class="text-nowrap"
+                                                              t-field="line.price_subtotal">
+                                                            27.00
+                                                        </span>
+                                                    </td>
+                                                </t>
+                                                <t t-elif="line.display_type == 'line_section'">
+                                                    <td colspan="99">
+                                                        <span t-field="line.name"
+                                                              t-options="{'widget': 'text'}">A
+                                                            section title
+                                                        </span>
+                                                    </td>
+                                                    <t t-set="current_section" t-value="line"/>
+                                                    <t t-set="current_subtotal" t-value="0"/>
+                                                </t>
+                                                <t t-elif="line.display_type == 'line_note'">
+                                                    <td colspan="99">
+                                                        <span t-field="line.name"
+                                                              t-options="{'widget': 'text'}">A
+                                                            note, whose content usually applies to the
+                                                            section or
+                                                            product above.
+                                                        </span>
+                                                    </td>
+                                                </t>
+                                            </tr>
+                                            <t t-if="current_section and (line_last or lines[line_index+1].display_type == 'line_section')">
+                                                <tr class="is-subtotal text-end">
+                                                    <td colspan="99">
+                                                        <strong class="mr16">Subtotal</strong>
+                                                        <span t-out="current_subtotal"
+                                                              t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}">
+                                                            31.05
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <div id="right-elements"
+                                         t-attf-class="#{'col-5' if report_type != 'html' else 'col-12 col-md-5'} ms-5 d-inline-block float-end">
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <div id="total" class="clearfix row">
+                                            <div class="ms-auto">
+                                                <table class="table table-sm table-borderless avoid-page-break-inside"
+                                                       style=" border-bottom: 1px solid black;">
+                                                    <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                                    <t t-call="account.document_tax_totals"/>
+                                                    <t t-if="print_with_payments">
+                                                        <t t-if="o.payment_state != 'invoicing_legacy'">
+                                                            <t t-set="payments_vals"
+                                                               t-value="o.sudo().invoice_payments_widget and o.sudo().invoice_payments_widget['content'] or []"/>
+                                                            <t t-foreach="payments_vals"
+                                                               t-as="payment_vals">
+                                                                <tr t-if="payment_vals['is_exchange'] == 0">
+                                                                    <td>
+                                                                        <i class="oe_form_field text-end oe_payment_label">
+                                                                            Paid on
+                                                                            <t t-out="payment_vals['date']"
+                                                                               t-options="{&quot;widget&quot;: &quot;date&quot;}">
+                                                                                2021-09-19
+                                                                            </t>
+                                                                        </i>
+                                                                    </td>
+                                                                    <td class="text-end">
+                                                                        <span t-out="payment_vals['amount']"
+                                                                              t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}">
+                                                                            20.00
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            <t t-if="len(payments_vals) &gt; 0">
+                                                                <tr class="border-black fw-bold">
+                                                                    <td>Amount Due</td>
+                                                                    <td class="text-end">
+                                                                        <span t-field="o.amount_residual">
+                                                                            11.05
+                                                                        </span>
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                        </t>
+                                                    </t>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div style="margin-bottom: 200px;"/>
+                                        <div class="mb-2">
+                                            <p class="text-end lh-sm"
+                                               t-if="o.company_id.display_invoice_amount_total_words">
+                                                Total amount in words:
+                                                <br/>
+                                                <small class="text-muted lh-sm">
+                                                    <span t-field="o.amount_total_words">Thirty one dollar
+                                                        and Five
+                                                        cents
+                                                    </span>
+                                                </small>
+                                            </p>
+                                        </div>
+                                        <t t-call="account.document_tax_totals_company_currency_template"/>
+                                    </div>
+                                    <div id="payment_term" class="clearfix">
+                                        <div class="justify-text">
+                                            <p t-if="not is_html_empty(o.fiscal_position_id.note)" name="note"
+                                               class="mb-2">
+                                                <span t-field="o.fiscal_position_id.note"/>
+                                            </p>
+                                        </div>
+                                        <t t-set="payment_term_details" t-value="o.payment_term_details"/>
+                                        <div class="mb-3">
+                                            <span id="payment_terms_note_id"
+                                                  t-if="o.invoice_payment_term_id.note"
+                                                  t-field="o.invoice_payment_term_id.note"
+                                                  name="payment_term">
+                                                Payment within 30 calendar day
+                                            </span>
+                                            <br/>
+                                            <t t-if="o.invoice_payment_term_id.display_on_invoice and payment_term_details">
+                                                <div t-if="o.show_payment_term_details"
+                                                     id="total_payment_term_details_table" class="row">
+                                                    <div t-attf-class="#{'col-10' if report_type != 'html' else 'col-sm-10 col-md-9'}">
+                                                        <t t-if="o._is_eligible_for_early_payment_discount(o.currency_id,o.invoice_date)">
+                                                            <td>
+                                                                <span t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
+                                                                      t-out="o.invoice_payment_term_id._get_amount_due_after_discount(o.amount_total, o.amount_tax)">
+                                                                    30.00
+                                                                </span>
+                                                                due if paid before
+                                                                <span t-out="o.invoice_payment_term_id._get_last_discount_date_formatted(o.invoice_date)">
+                                                                    2024-01-01
+                                                                </span>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="len(payment_term_details) &gt; 1"
+                                                           t-foreach="payment_term_details" t-as="term">
+                                                            <div>
+                                                                <span t-out="term_index + 1">1</span>
+                                                                - Installment of
+                                                                <t t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"
+                                                                   t-out="term.get('amount')"
+                                                                   class="text-end">31.05
+                                                                </t>
+                                                                <span>due on</span>
+                                                                <t t-out="term.get('date')"
+                                                                   class="text-start">
+                                                                    2024-01-01
+                                                                </t>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <div style="margin-bottom: 220px;"/>
+                                        <div class="mb-3"
+                                             t-if="o.move_type in ('out_invoice', 'in_refund') and o.payment_reference">
+                                            <p name="payment_communication">
+                                                Payment Communication:
+                                                <span class="fw-bold" t-field="o.payment_reference">
+                                                    INV/2023/00001
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <t t-set="show_qr"
+                                           t-value="o.display_qr_code and o.amount_residual &gt; 0"/>
+                                        <div t-if="not show_qr" name="qr_code_placeholder"
+                                             class="oe_structure"/>
+                                        <div id="qrcode" class="d-flex mb-3 avoid-page-break-inside"
+                                             t-else="">
+                                            <div class="qrcode me-3" id="qrcode_image">
+                                                <t t-set="qr_code_url"
+                                                   t-value="o._generate_qr_code(silent_errors=True)"/>
+                                                <p t-if="qr_code_url" class="position-relative mb-0">
+                                                    <img t-att-src="qr_code_url"/>
+                                                    <img src="/account/static/src/img/Odoo_logo_O.svg"
+                                                         id="qrcode_odoo_logo"
+                                                         class="top-50 start-50 position-absolute bg-white border border-white border-3 rounded-circle"/>
+                                                </p>
+                                            </div>
+                                            <div class="d-inline text-muted lh-sm fst-italic"
+                                                 id="qrcode_info"
+                                                 t-if="qr_code_url">
+                                                <p>Scan this QR Code to<br/>pay with your mobile
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="text-muted mb-3"
+                                             t-attf-style="#{'text-align:justify;text-justify:inter-word;' if o.company_id.terms_type != 'html' else ''}"
+                                             t-if="not is_html_empty(o.narration)" name="comment">
+                                            <span t-field="o.narration"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 100px;"/>
+                                <div style="font-size: 9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000;">
+                                    <h4 class="text-center">Terms and Conditions</h4>
+                                    <p style="text-align: justify; font-size:9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 25px;">
+                                        <p style="text-align: justify; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                Allgemeine Geschäftsbedingungen der ecoNG GmbH (Fassung
+                                                01.01.2024)
+                                            </strong>
+                                        </p>
+                                        <p style="text-align: justify;  font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                A. Geltung
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Die folgenden Allgemeinen Geschäftsbedingungen (AGB) gelten zusammen
+                                            mit den
+                                            im erteilten Auftrag gesondert enthaltenen
+                                            <br/>
+                                            <br/>Bestimmungen für
+                                            sämtliche
+                                            Rechtsgeschäfte mit
+                                            unseren Vertragspartnern, sofern in speziellen Geschäftsbedingungen
+                                            nichts
+                                            <br/>
+                                            anderes
+                                            geregelt
+                                            ist. Maßgeblich ist jeweils die zum Zeitpunkt des Vertragsschlusses
+                                            gültige
+                                            Fassung.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Soweit Rechtsgeschäfte mit Verbrauchern im Sinne des KSchG
+                                            abgeschlossen
+                                            werden, gehen
+                                            die zwingenden Bestimmungen
+                                            <br/>
+                                            dieses Gesetzes den folgenden
+                                            Allgemeinen
+                                            Geschäftsbedingungen vor.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Diese Allgemeinen Geschäftsbedingungen gelten auch für alle weiteren
+                                            Aufträge und
+                                            Auftragserweiterungen, selbst wenn im
+                                            <br/>
+                                            Einzelfall darauf nicht
+                                            ausdrücklich
+                                            Bezug genommen wird.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Abweichende, entgegenstehende oder ergänzende Allgemeine
+                                            Geschäftsbedingungen
+                                            werden,
+                                            selbst bei Kenntnis, nicht
+                                            <br/>
+                                            Vertragsbestandteil, es sei denn, ihrer
+                                            Geltung
+                                            wird
+                                            ausdrücklich
+                                            schriftlich zugestimmt.
+                                        </p>
+                                        <p style="text-align: justify; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                B.
+                                            </strong>
+                                            Auftragsannahme Die Ablehnung eines schriftlichen Auftrages haben
+                                            wir binnen 21 Tagen nach dessen Einlagen schriftlich zu erklären,
+                                            andernfalls
+                                            gilt
+                                            er mit
+                                            dem Datum der Auftragserteilung als angenommen. Bei Postversand ist
+                                            die
+                                            Ablehnung
+                                            rechtzeitig, wenn sie innerhalb der Fristen zur Post gegeben wird.
+                                        </p>
+                                        <p style="text-align: justify; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                C. Angebote
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Richtpreise, die von uns im Vorfeld eines Projektes abgegeben
+                                            werden, werden
+                                            schriftlich
+                                            erteilt, sind freibleibend und können vom im tatsächlichen Angebot
+                                            genannten
+                                            Preis
+                                            abweichen. Ein Richtpreis wird von uns nach bestem Wissen und
+                                            Gewissen in
+                                            einem
+                                            sogenannten
+                                            Richtpreisangebot abgegeben. Eine Gewähr für die Richtigkeit und
+                                            Vollständigkeit
+                                            besteht
+                                            nicht. Durch die Abgabe eines Richtpreisangebotes entstehen für uns
+                                            keinerlei
+                                            Verpflichtungen.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Sämtliche Angebote werden nur schriftlich erteilt, sind freibleibend
+                                            und
+                                            beinhalten
+                                            keine Pflicht zur Auftragsannahme. Ein Vertrag kommt mit
+                                            Unterfertigung des
+                                            Angebots
+                                            oder
+                                            Zugang der schriftlichen Auftragsbestätigung per Post oder EMail
+                                            zustande.
+                                            Ein
+                                            Vertragsangebot unserer Vertragspartner bedarf einer
+                                            Auftragsbestätigung
+                                            unsererseits. Der
+                                            Anbietende ist an eine angemessene, mindestens jedoch 8-tägige Frist
+                                            ab
+                                            Zugang
+                                            des
+                                            Angebots
+                                            gebunden. Wir behalten uns technische sowie sonstige Änderungen vor,
+                                            sofern
+                                            dies
+                                            dem
+                                            Vertragspartner zumutbar oder sachlich gerechtfertigt ist.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Sämtliche von uns zur Verfügung gestellten und auf Planangaben und
+                                            Vorgaben
+                                            des
+                                            Vertragspartners beruhende
+                                            <br/>
+                                            Kalkulationen (insbesondere
+                                            Ertragssimulationen
+                                            und
+                                            Wirtschaftlichkeitsberechnungen) sowie Zeichnungen (insbesondere
+                                            Layoutpläne),
+                                            Abbildungen,
+                                            Beschreibungen und Skizzen in sämtlichen Druckwerken sind nicht
+                                            Gegenstand
+                                            unserer
+                                            freibleibenden Angebote, unverbindlich und dienen lediglich zu
+                                            Informationszwecken.
+                                            Wir
+                                            übernehmen keine Garantie, weder ausdrücklich noch stillschweigend,
+                                            für die
+                                            Genauigkeit,
+                                            Zuverlässigkeit und Vollständigkeit von jeglichen Informationen,
+                                            Formeln
+                                            oder
+                                            Ergebnissen,
+                                            die mit derartigen Musterberechnungen oder Zeichnungen zur Verfügung
+                                            gestellt
+                                            werden. Wir
+                                            übernehmen keine Haftung für Verlust oder Schäden jedweder Art, die
+                                            auf das
+                                            Vertrauen in
+                                            diese Musterberechnungen oder Zeichnungen zurückgeführt werden
+                                            könnten.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Die gesamten Angebots- und Projektunterlagen sind urheberrechtlich
+                                            geschützt.
+                                            Ohne
+                                            unsere Zustimmung dürfen diese weder Dritten zugänglich gemacht noch
+                                            vervielfältigt
+                                            werden.
+                                            Wir sind berechtigt, die Unterlagen jederzeit zurückfordern.
+                                            In diesem Fall
+                                            sind
+                                            die
+                                            Unterlagen unverzüglich vom Vertragspartner zurückzustellen und/
+                                            oder
+                                            unwiderruflich
+                                            zu
+                                            löschen.
+                                            <strong>5.</strong>
+                                            Aus Angaben in Werbeschriften, Katalogen und Prospekten sowie
+                                            schriftlichen
+                                            oder
+                                            mündlichen Äußerungen, welche nicht Vertragsgegenstand wurden,
+                                            können keine
+                                            Haftungen
+                                            begründet oder Gewährleistungsansprüche abgeleitet werden.
+                                        </p>
+                                        <p style="text-align: justify;  color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                D. Preise
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Alle von uns genannten Preise sind, sofern nichts anderes
+                                            ausdrücklich
+                                            vermerkt
+                                            ist,
+                                            exklusive Umsatzsteuer zu verstehen. Die angebotenen Preise gelten
+                                            bis auf
+                                            Widerruf.
+                                            Sämtliche Preisangaben sind freibleibend. Wir behalten uns eine
+                                            Anpassung
+                                            des
+                                            Preises vor,
+                                            wenn von den in den Vertragsgrundlagen angeführten Spezifikationen
+                                            des
+                                            Leistungsgegenstandes
+                                            aufgrund einer Leistungsänderung abgewichen wird. Sollten sich die
+                                            zur
+                                            Leistungserfüllung
+                                            notwendigen Kosten, etwa jene für Materialien verändern, so sind wir
+                                            berechtigt,
+                                            den
+                                            Preis
+                                            entsprechend anzupassen. Die Kosten für die zur Leistungserfüllung
+                                            notwendigen
+                                            Umbauarbeiten, elektrische Arbeiten, Zusatzaufwendungen im Zuge der
+                                            Montage
+                                            etc.
+                                            sind nicht
+                                            in den Angeboten enthalten und werden separat verrechnet.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Treten zwischen Vertragsschluss und Lieferung Kostenerhöhungen von
+                                            mindestens 3%
+                                            infolge
+                                            von Umständen ein, die nicht von unserem Willen abhängen, wie
+                                            Empfehlungen
+                                            der
+                                            Paritätischen
+                                            Kommission, Erhöhung unseres Einstandspreises, Erhöhung der
+                                            Erzeuger- und /
+                                            oder
+                                            Großhandelspreise, aufgrund von Lohnkostenerhöhungen durch Gesetz,
+                                            Verordnung
+                                            oder
+                                            Kollektivvertrag, oder Erhöhung oder Neueinführung von Abgaben bzw.
+                                            aufgrund
+                                            von
+                                            Wertsicherungsklauseln, so erhöhen sich die in Betracht kommenden
+                                            Preise
+                                            entsprechend
+                                            Einer Entgeltanpassung müssen wir verpflichtend nachkommen, wenn
+                                            diese von
+                                            unserem
+                                            Vertragspartner beantragt wird. Für Verbraucher sind derartige
+                                            Preiserhöhungen
+                                            innerhalb von
+                                            2 Monaten nach Vertragsabschluss sowie bei durch uns verschuldeten
+                                            Verzug
+                                            ausgeschlossen.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Nach Auftragserhalt ist eine Anzahlung von 10% des Angebotspreises
+                                            zu
+                                            leisten;
+                                            es
+                                            sei
+                                            denn in der Auftragsbestätigung sind abweichende Zahlungsbedingungen
+                                            vereinbart.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Nach der Modulanlieferung legen wir eine Teilrechnung in der Höhe
+                                            von 60%
+                                            des
+                                            Angebotspreises; es sei denn in der Auftragsbestätigung sind
+                                            abweichende
+                                            <br/>
+                                            Zahlungsbedingungen
+                                            vereinbart.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Nach erfolgter Inbetriebnahme des Leistungsgegenstandes und
+                                            Anlagenübergabe
+                                            legen
+                                            wir
+                                            eine Schlussrechnung in Höhe von 30 % des Angebotspreises.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Fallen Mehrkosten im Rahmen der Auftragsrealisierung an, werden
+                                            diese im
+                                            Zuge
+                                            der
+                                            Schlussrechnung verrechnet.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Nachträgliche Änderungen, die vom Vertragspartner veranlasst sind,
+                                            sind bei
+                                            einem
+                                            Mehraufwand gesondert zu vergüten.
+                                            <br/>
+                                            <strong>8.</strong>
+                                            Bei Dauerschuldverhältnissen wird das Entgelt als wertgesichert nach
+                                            dem VPI
+                                            2020
+                                            vereinbart und auf dessen Basis
+                                            <br/>
+                                            angepasst. Der Monat des
+                                            Vertragsabschlusses
+                                            wird
+                                            als
+                                            Ausgangsbasis festgelegt.
+                                        </p>
+                                        <p style="text-align: justify;  color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                E. Zahlungsbedingungen
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Die Zahlungen sind entsprechend der schriftlich vereinbarten
+                                            Zahlungsbedingungen
+                                            zu
+                                            leisten. Wenn nicht gemäß schriftlicher Auftragsbestätigung
+                                            abweichende
+                                            Zahlungsbedingungen
+                                            vereinbart wurden, sind die in Rechnung gestellten Beträge innerhalb
+                                            von 7
+                                            Tagen
+                                            ab
+                                            Rechnungsdatum netto ohne Abzug zur Zahlung fällig.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Skontoabzüge bedürfen einer
+                                            gesonderten Vereinbarung. Im Falle des (Teil-) Zahlungsverzuges
+                                            treten
+                                            allfällige
+                                            Skontovereinbarungen außer Kraft.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Zahlungen unserer Vertragspartner gelten erst mit
+                                            dem Zeitpunkt des Einganges auf unserem Geschäftskonto als
+                                            geleistet.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Die
+                                            Zurückhaltung von Zahlungen sowie die Aufrechnung mit etwaigen
+                                            Gegenforderungen,
+                                            durch
+                                            unsere Vertragspartner, gleich aus welchem Grund, sind
+                                            ausgeschlossen. Eine
+                                            Zurückbehaltung
+                                            des Kaufpreises im Falle berechtigter
+                                            Verbesserungsansprüche ist nur im
+                                            Umfang
+                                            des
+                                            für die
+                                            Verbesserung notwendigen Aufwandes zulässig.
+                                            Dies gilt nicht für
+                                            Verbrauchergeschäfte.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Bei Zahlungsverzug sind wir unbeschadet unserer sonstigen Rechte
+                                            berechtigt,
+                                            die
+                                            in
+                                            unserem Eigentumsvorbehalt stehenden Waren, Geräte und dergleichen –
+                                            ohne
+                                            dass
+                                            dies
+                                            einem
+                                            Rücktritt vom Vertrag gleichzusetzen ist – zurückzunehmen.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Bei Zahlungsverzug sind wir berechtigt, den Ersatz des tatsächlich
+                                            entstandenen
+                                            Schadens
+                                            zu begehren und die gesetzlichen Verzugszinsen, mindestens jedoch 10
+                                            % p.a.
+                                            zu
+                                            verrechnen.
+                                            <strong>7.</strong>
+                                            Der säumige Vertragspartner verpflichtet sich, für den Fall des
+                                            Verzuges,
+                                            die
+                                            uns
+                                            entstehenden Mahnund Inkassospesen, soweit sie zur
+                                            zweckentsprechenden
+                                            Rechtsverfolgung
+                                            notwendig sind, zu ersetzen.
+                                            <br/>
+                                            <strong>8.</strong>
+                                            Wir sind berechtigt die Rechnung elektronisch zu übermitteln.
+                                            <br/>
+                                            <strong>9.</strong>
+                                            Im Falle eines Zahlungsverzuges verpflichtet sich der
+                                            Vertragspartner,
+                                            zweckentsprechende Kosten, die zur Einbringlichmachung notwendig
+                                            waren, wie
+                                            etwa
+                                            Inkassospesen, Rechtsanwalts- oder Mahnkosten, zu ersetzen. Pro
+                                            Mahnung
+                                            verpflichtet
+                                            sich
+                                            der Vertragspartner bei verschuldetem Zahlungsverzug zu einer
+                                            Zahlung von
+                                            Mahnspesen
+                                            iHv €
+                                            50, -, wenn diese im Verhältnis zur betriebenen Forderung angemessen
+                                            sind.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>F. Eigentumsvorbehalt</strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Sämtliche Waren werden von uns unter Eigentumsvorbehalt geliefert
+                                            und
+                                            bleiben
+                                            bis
+                                            zur vollständigen Bezahlung unser Eigentum.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Der Vertragspartner ist verpflichtet, die Ware während des Bestehens
+                                            des
+                                            Eigentumsvorbehalts pfleglich zu behandeln. Allfällige Wartungs- und
+                                            Inspektionsarbeiten,
+                                            hat der Vertragspartner auf eigene Kosten regelmäßig durchzuführen.
+                                            In der
+                                            Geltendmachung
+                                            des Eigentumsvorbehaltes liegt nur dann ein Rücktritt vom Vertrag,
+                                            wenn
+                                            dieser
+                                            ausdrücklich
+                                            ausdrücklich
+                                            erklärt wird. Bei Warenrücknahme sind wir berechtigt, angefallene
+                                            Transport-
+                                            und
+                                            Manipulationsspesen zu verrechnen.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Bei Zugriffen Dritter auf die Vorbehaltsware – insbesondere durch
+                                            Zwangsvollstreckungsmaßnahmen – verpflichtet sich der
+                                            Vertragspartner, auf
+                                            unser
+                                            Eigentum
+                                            hinzuweisen und uns unverzüglich zu benachrichtigen. Gleiches gilt
+                                            bei
+                                            etwaigen
+                                            Beschädigungen oder Vernichtung des Leistungsgegenstandes.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Bis zur vollständigen Begleichung der offenen Kaufpreisforderung,
+                                            ist eine
+                                            Veräußerung, Verpfändung, Sicherungsübereignung, Vermietung oder
+                                            anderweitige
+                                            Überlassung
+                                            des von uns an den Vertragspartner gelieferten Gegenstandes ohne
+                                            unsere
+                                            schriftliche
+                                            Zustimmung unzulässig.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Im Falle einer Weiterveräußerung der unter Eigentumsvorbehalt
+                                            stehenden
+                                            Gegenstandes durch den Vertragspartner erstreckt sich das
+                                            vorbehaltene
+                                            Eigentum
+                                            auf
+                                            den
+                                            zukünftigen Erlös bzw. die Kaufpreisforderung aus diesem Geschäft.
+                                            Im Falle
+                                            einer
+                                            solchen
+                                            Weiterveräußerung ist der Vertragspartner verpflichtet diese
+                                            umgehend zu
+                                            melden
+                                            und
+                                            den
+                                            Erlös getrennt zu verwahren.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Der Vertragspartner trägt das volle Risiko für die Vorbehaltsware,
+                                            insbesondere
+                                            für
+                                            die Gefahr des Untergangs, des Verlustes oder der Verschlechterung
+                                            sowie bei
+                                            Verstoß
+                                            gegen
+                                            die vorgenannten Verpflichtungen.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Wir sind berechtigt, bei vertragswidrigem Verhalten des
+                                            Vertragspartners,
+                                            insbesondere bei Zahlungsverzug, vom Vertrag zurückzutreten und den
+                                            Leistungsgegenstand
+                                            herauszuverlangen. Daneben sind wir berechtigt bei Verletzung einer
+                                            vorgenannten
+                                            Pflicht vom
+                                            Vertrag zurückzutreten und den Leistungsgegenstand
+                                            herauszuverlangen, wenn
+                                            für
+                                            uns
+                                            die
+                                            Aufrechterhaltung des Vertrags nicht mehr zumutbar ist.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                G. Erfüllung, Gefahrenübergang
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Der Leistungsumfang bestimmt sich nach dem vom Vertragspartner
+                                            bestätigten
+                                            Auftragsumfang. Ein übernommener Auftrag
+                                            gilt mit erbrachter Leistung als
+                                            erfüllt;
+                                            sofern
+                                            nicht eine andere Form der Erfüllung schriftlich vereinbart wurde.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Erfüllungsort für jede Leistung und Zahlung ist unser Firmensitz,
+                                            auch dann
+                                            wenn
+                                            die Übergabe vereinbarungsgemäß an einem anderen Ort erfolgt. Die
+                                            Gefahr
+                                            geht
+                                            spätestens bei
+                                            Zustellung auf den Vertragspartner über; es sei denn, der Schaden
+                                            wurde von
+                                            uns
+                                            schuldhaft
+                                            verursacht. Bei Verbrauchergeschäften geht die Gefahr bei Übergabe
+                                            des
+                                            Leistungsgegenstandes
+                                            über.
+                                            <strong>3.</strong>
+                                            Wir sind berechtigt Subunternehmer mit der Leistungserfüllung zu
+                                            beauftragen
+                                            (insbesondere bei Montage- und Elektroarbeiten). Der Vertragspartner
+                                            gibt
+                                            dazu
+                                            seine
+                                            Zustimmung.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Die Lieferfrist wird individuell je nach Auftrag bzw. Auftragsgröße
+                                            vereinbart.
+                                            Die
+                                            vereinbarte Lieferfrist beginnt frühesten erst ab dem Zeitpunkt, zu
+                                            dem alle
+                                            technischen,
+                                            kaufmännischen und finanziellen Belange einvernehmlich festgelegt
+                                            sind. Der
+                                            Liefergegenstand
+                                            wird direkt vom Hersteller oder Zulieferanten an den Vertragspartner
+                                            zugestellt.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Die Einhaltung der vereinbarten Lieferfrist gilt vorbehaltlich
+                                            unvorhersehbarer
+                                            oder vom Parteiwillen unabhängiger Umstände, wie beispielsweise alle
+                                            Fälle
+                                            von
+                                            höherer
+                                            Gewalt, kriegerischer Ereignisse, behördlicher Eingriffe und
+                                            Verbote,
+                                            Transport-
+                                            und
+                                            Verzollungsverzug, Transportschäden oder Energiemangel. Derartige
+                                            Umstände
+                                            berechtigen auch
+                                            dann zur Verlängerung der Lieferfrist, wenn sie bei einem Hersteller
+                                            oder
+                                            Zulieferanten
+                                            eintreten.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Wir behalten uns vor, jederzeit Produkte, auch wenn diese
+                                            schriftlich in
+                                            Auftragsbestätigungen oder Rechnungen festgelegt und vereinbart
+                                            wurden, auf
+                                            Ausweichprodukte
+                                            zu ändern, wenn diese qualitativ ähnlich gut oder gleichwertig sind
+                                            und der
+                                            Vertragspartner
+                                            keinen nennenswerten Nachteil davonträgt.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Wir sind berechtigt, Teil- oder Vorlieferungen durchzuführen und zu
+                                            verrechnen.
+                                            Hierzu bedarf es keiner separaten Absprache mit dem Vertragspartner.
+                                            <br/>
+                                            <strong>8.</strong>
+                                            Der Vertragspartner hat den Leistungsgegenstand unmittelbar nach
+                                            Erhalt am
+                                            vereinbarten Abnahmeort zu prüfen und zu übernehmen. Eine
+                                            Reklamation muss
+                                            innerhalb
+                                            von
+                                            acht Tagen erfolgen; ansonsten gilt der Leistungsgegenstand als in
+                                            Ordnung
+                                            übernommen. Dies
+                                            gilt auch, wenn der Auftraggeber stillschweigend oder ausdrücklich
+                                            auf die
+                                            Prüfung
+                                            verzichtet.
+                                            <br/>
+                                            <strong>9.</strong>
+                                            Der Vertragspartner stellt die notwendigen Voraussetzungen mit dem
+                                            Netzbetreiber
+                                            wie Beantragung des Zählpunktes her; abweichende Vereinbarungen in
+                                            der
+                                            Auftragsbestätigung
+                                            gehen vor. Aufgrund der gesetzlichen Bestimmungen (z.B. Datenschutz)
+                                            können
+                                            wir
+                                            diesbezüglich nur unterstützend tätig werden. Weiters stehen wir dem
+                                            Vertragspartner
+                                            bei
+                                            Behördenwegen wie Genehmigungen oder Förderansuchen unterstützend
+                                            zur
+                                            Verfügung.
+                                            <br/>
+                                            <strong>10.</strong>
+                                            Wir beraten den Vertragspartner unverbindlich bezüglich Förderungen,
+                                            Stromlieferung,
+                                            Strombezug etc. Wir geben die nach unserem Wissenstand bestmögliche
+                                            Empfehlung
+                                            ab;
+                                            übernehmen diesbezüglich jedoch keinerlei Garantien. Insbesondere
+                                            bei
+                                            Förderungen
+                                            kann es zu
+                                            - außerhalb unseres Einflussbereiches liegenden - kurzfristigen
+                                            Änderungen
+                                            kommen.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                H. Rücktritt vom Vertrag
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Für Rechtsgeschäfte mit Verbrauchern kommen die zwingenden
+                                            Bestimmungen des
+                                            KSchG
+                                            zur
+                                            Anwendung. In anderen Fällen gilt Nachfolgendes.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Ein Rücktritt vom Vertrag ist nur aus wichtigem Grund zulässig. Ein
+                                            wichtiger
+                                            Grund
+                                            liegt insbesondere in den nachfolgenden Fällen vor: - Wenn Umstände
+                                            vorliegen,
+                                            die
+                                            eine
+                                            zeitgerechte Vertragserfüllung verunmöglichen oder zu wesentlichen
+                                            Änderungen
+                                            führen, sofern
+                                            diese nicht von uns zu vertreten sind - Wiederholte Verletzung der
+                                            Vertragspflichten
+                                            trotz
+                                            schriftlicher Abmahnungen - Handlungen des Auftraggebers mit
+                                            Schädigungsabsicht
+                                            für
+                                            uns -
+                                            Handlungen des Auftraggebers mit Dritten, die für uns nachteilig
+                                            sind, gegen
+                                            die
+                                            guten
+                                            Sitten verstoßen oder Abreden mit Dritten, die gegen die Grundsätze
+                                            des
+                                            freien
+                                            Wettbewerbs
+                                            verstoßen
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Ist der Vertragspartner mit einer vereinbarten Zahlung oder
+                                            sonstigen
+                                            Leistung
+                                            im
+                                            Verzug oder werden uns nach
+                                            <br/>
+                                            Rechtswirksamkeit des Auftrages oder noch vor
+                                            dessen
+                                            Erfüllung
+                                            Umstände bekannt, welche die Erfüllung
+                                            des Vertrages von Seiten des
+                                            Vertragspartners
+                                            nicht
+                                            mehr ausreichend gesichert erscheinen lassen, so sind wir
+                                            berechtigt,
+                                            entweder
+                                            auf
+                                            Erfüllung
+                                            des Vertrages zu bestehen oder unter Setzung einer angemessenen
+                                            Frist vom
+                                            Vertrag
+                                            zurückzutreten.
+                                            <strong>4.</strong>
+                                            Wird über das Vermögen des Vertragspartners ein Insolvenzverfahren
+                                            eröffnet
+                                            bzw.
+                                            die Eröffnung eines Insolvenzverfahrens mangels kostendeckenden
+                                            Vermögens
+                                            abgewiesen, so
+                                            sind wir berechtigt, ohne Setzung einer Nachfrist vom Vertrag
+                                            zurückzutreten.
+                                            Hat
+                                            der
+                                            Vertragspartner den Rücktritt verschuldet, hat dieser den
+                                            tatsächlich
+                                            entstandenen
+                                            Schaden
+                                            zu ersetzen,
+                                            mindestens aber einen pauschalierten Schadenersatz von 15% des
+                                            vereinbarten
+                                            Entgeltes oder Kaufpreises zu bezahlen. Der Vertragspartner hat uns
+                                            von der
+                                            Eröffnung eines
+                                            Konkurses über sein Vermögen zu verständigen.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Ein Rücktritt vom Vertrag ist elektronisch und per eingeschriebenem
+                                            Brief
+                                            geltend
+                                            zu machen.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Tritt der Vertragspartner – ohne dazu berechtigt zu sein – vom
+                                            Vertrag
+                                            zurück
+                                            oder
+                                            begehrt er seine Aufhebung, so haben wir die Wahl, auf die Erfüllung
+                                            des
+                                            Vertrages
+                                            zu
+                                            bestehen, oder der Aufhebung des Vertrages zuzustimmen. Im letzteren
+                                            Fall
+                                            ist
+                                            der
+                                            Vertragspartner verpflichtet, den tatsächlich entstandenen Schaden,
+                                            mindestens
+                                            aber
+                                            einen
+                                            pauschalierten Schadenersatz von 15% des vereinbarten Kaufpreises zu
+                                            bezahlen.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Kommt es aufgrund vorsätzlichen oder fahrlässigen Verhaltens zum
+                                            Lieferverzug,
+                                            ist
+                                            der Vertragspartner berechtigt, nach erfolglosem Ablauf einer
+                                            angemessenen,
+                                            schriftlich
+                                            gesetzten Nachfrist vom Vertrag zurückzutreten. Das Recht des
+                                            Rücktritts vom
+                                            Vertrag
+                                            steht
+                                            dem Vertragspartner bei Verzug wegen höherer Gewalt und bei Verzug
+                                            wegen
+                                            leichter
+                                            Fahrlässigkeit hinsichtlich Waren, die nach Angaben des
+                                            Vertragspartners
+                                            speziell
+                                            herzustellen oder zu beschaffen sind, nicht zu. Zur Forderung eines
+                                            Schadenersatzes
+                                            wegen
+                                            Nichterfüllung oder Verspätung ist der Vertragspartner nur im Falle
+                                            eines
+                                            Verzuges
+                                            aufgrund
+                                            unseres vorsätzlichen oder grob fahrlässigen Verhaltens berechtigt.
+                                            <br/>
+                                            <strong>8.</strong>
+                                            Andererseits sind wir bei Zahlungsverzug des Vertragspartners
+                                            unbeschadet
+                                            unserer
+                                            sonstigen Rechte berechtigt, nach Gewährung einer angemessenen
+                                            Nachfrist vom
+                                            Vertrag
+                                            zur
+                                            Gänze oder zum Teil zurückzutreten. Im Falle unseres Rücktritts
+                                            steht uns
+                                            eine
+                                            Abstandsgebühr in der Höhe von 10% des Preises jener Waren zu,
+                                            hinsichtlich
+                                            derer
+                                            der
+                                            Rücktritt erfolgt ist. Die Geltendmachung eines
+                                            darüberhinausgehenden
+                                            Schadens
+                                            bleibt
+                                            vorbehalten.
+                                            <br/>
+                                            <strong>9.</strong>
+                                            Die Geltendmachung eines Anspruches wegen Wegfall der
+                                            Geschäftsgrundlage,
+                                            laesio
+                                            enormis, Wucher und Irrtum durch den Käufer wird ausgeschlossen.
+                                            <br/>
+                                            <strong>10.</strong>
+                                            Für die zweckentsprechende Rechtsverfolgung notwendige Kosten trägt
+                                            der
+                                            Vertragspartner.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                I. Gewährleistung
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Für Verbrauchergeschäfte gelten die gesetzlichen Bestimmungen. In
+                                            anderen
+                                            Fällen
+                                            sind wir berechtigt, mangelhafte Waren gegen gleichwertige
+                                            einwandfreie
+                                            Waren
+                                            innerhalb
+                                            einer angemessenen Frist auszutauschen oder den Mangel innerhalb
+                                            einer
+                                            angemessenen
+                                            Frist zu
+                                            beheben. Dadurch erlischt ein Anspruch auf Vertragsaufhebung oder
+                                            Preisminderung.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Der Gewährleistungsanspruch entsteht nur dann, wenn der
+                                            Vertragspartner die
+                                            aufgetretenen Mängel unverzüglich schriftlich angezeigt hat. Der
+                                            Anzeige
+                                            eines
+                                            Mangels ist
+                                            eine detaillierte Fehlerbeschreibung beizulegen.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Die Verjährungsfrist für die Geltendmachung von Mängeln an
+                                            beweglichen
+                                            Sachen
+                                            beträgt 6 Monate, bei unbeweglichen Sachen 12 Monate ab Übergabe.
+                                            Ansprüche
+                                            gemäß §
+                                            933b
+                                            ABGB verjähren ebenso binnen dieser Frist.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Die Mangelhaftigkeit der Ware zum Zeitpunkt der Übergabe ist vom
+                                            Vertragspartner
+                                            nachzuweisen.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Nicht von der Gewährleistung umfasst sind solche Mängel, die aus
+                                            nicht von
+                                            uns
+                                            bewirkter Anordnung und Montage,
+                                            <br/>
+                                            ungenügender Einrichtung,
+                                            Beanspruchung der
+                                            Teile
+                                            über die
+                                            angegebene Leistung, nachlässiger oder unrichtiger Behandlung und
+                                            Verwendung
+                                            ungeeigneter
+                                            Betriebsmaterialien entstehen. Dies gilt ebenso für Mängel, die auf
+                                            vom
+                                            Vertragspartner
+                                            beigestelltes Material zurückzuführen sind. Wir haften insbesondere
+                                            auch
+                                            nicht
+                                            für
+                                            Beschädigungen, die auf Handlungen Dritter oder auf chemische
+                                            Einflüsse
+                                            zurückzuführen sind.
+                                            Die Gewährleistung schließt den natürlichen Verschleiß nicht ein.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Der Vertragspartner erhält von uns keine Garantien in Bezug auf die
+                                            Beschaffenheit
+                                            der Komponenten. Soweit ein Hersteller eine Garantie für die
+                                            Beschaffenheit
+                                            oder
+                                            für
+                                            Eigenschaften des Kaufgegenstandes übernimmt, stehen dem
+                                            Vertragspartner,
+                                            unbeschadet der
+                                            gesetzlichen Ansprüche, die Rechte aus der Garantie zu den in der
+                                            Garantieerklärung
+                                            angegebenen Bedingungen ausschließlich gegenüber dem Hersteller zu.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Geringfügige oder sonstige Änderungen hinsichtlich Leistung oder
+                                            Lieferung,
+                                            welche
+                                            für den Käufer zumutbar sind, gelten als vorweg genehmigt.
+                                            <strong>8.</strong>
+                                            Nach Erhalt der Ware ist diese durch den Käufer zu prüfen und zu
+                                            übernehmen.
+                                            Dies
+                                            kann auch durch bevollmächtige Personen erfolgen. Der
+                                            Auftragsgegenstand
+                                            gilt
+                                            als
+                                            ordnungsgemäß geliefert, wenn der Käufer auf die Prüfung
+                                            <br/>stillschweigend
+                                            oder
+                                            ausdrücklich
+                                            verzichtet.
+                                            <br/>
+                                            <strong>9.</strong>
+                                            Nebenkosten, wie etwa für Fahrt, Wegzeit, Ein- und Ausbau, Transport
+                                            und
+                                            Entsorgung, die im Zusammenhang mit der
+                                            <br/>
+                                            Mängelbehebung entstehen,
+                                            sind vom
+                                            Käufer zu
+                                            tragen.
+                                            Für Mängelbehebungsarbeiten im Betrieb des Käufers sind Gerüste,
+                                            Hebevorrichtungen,
+                                            erforderliche Hilfskräfte sowie Kleinmaterialien etc. unentgeltlich
+                                            bereitzustellen.
+                                            Teile,
+                                            die ersetzt werden, sind unser Eigentum.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                J. Haftung
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Unsere Haftung ist auf Vorsatz oder grob fahrlässiges Verhalten
+                                            beschränkt;
+                                            ausgenommen sind Personenschäden.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Die Haftung für leichte Fahrlässigkeit, der Ersatz von Folge- und
+                                            Vermögensschäden,
+                                            Mangelfolgeschäden, nicht erzielten Ersparnissen, Zinsverlusten,
+                                            indirekten
+                                            Schäden,
+                                            Produktionsausfall, Finanzierungskosten, Verlust von Energie, Daten
+                                            sowie
+                                            Informationen,
+                                            Kosten für Ersatzenergie, des entgangenen Gewinns und von Schäden
+                                            aus
+                                            Ansprüchen
+                                            Dritter
+                                            gegen den Vertragspartner sind
+                                            ausgeschlossen.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Die Geltendmachung von Haftungs-, Auskunfts- oder Regressbegehren
+                                            sind unter
+                                            genauer Angabe des Schadens, des haftungsbegründenden Sachverhaltes
+                                            einschließlich
+                                            des
+                                            Nachweises, dass die Lieferungen und Leistungen von uns stammen,
+                                            schriftlich
+                                            an
+                                            die
+                                            Geschäftsleitung zu richten. Die Haftung für Sachschäden aus einem
+                                            Produktfehler
+                                            im
+                                            Sinne
+                                            des Produkthaftungsgesetzes wird für alle an der Herstellung und dem
+                                            Vertrieb
+                                            beteiligten
+                                            Unternehmen ausgeschlossen. Der Kaufgegenstand bietet nur jene
+                                            Sicherheit,
+                                            die
+                                            auf
+                                            Grund von
+                                            Zulassungsvorschriften, Betriebsanleitungen, Vorschriften des
+                                            Verkäufers
+                                            über
+                                            die
+                                            Behandlung
+                                            des Liefergegenstandes (Betriebsanleitung) – insbesondere im
+                                            Hinblick auf
+                                            die
+                                            vorgeschriebenen Überprüfungen – und sonstigen gegebenen Hinweisen
+                                            erwartet
+                                            werden
+                                            kann.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Regressforderungen im Sinne des § 5 Produkthaftungsgesetzes sind
+                                            ausgeschlossen,
+                                            es
+                                            sei denn, der Geschädigte weist nach, dass der Fehler in unserer
+                                            Sphäre
+                                            verursacht
+                                            und
+                                            zumindest grob fahrlässig verschuldet worden ist. Pro Schadensfall
+                                            wird die
+                                            Haftung
+                                            auf €
+                                            125.000, - oder auf 25 % des Nettoauftragswerts (je nachdem, welcher
+                                            Wert
+                                            niedriger
+                                            ist)
+                                            beschränkt. Die Gesamthaftung wird auf € 500.000, - oder auf den
+                                            Nettoauftragswert
+                                            (je
+                                            nachdem, welcher Wert niedriger ist) beschränkt.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Unsere Haftung ist für sämtliche Leistungen, die von externen
+                                            Dienstleistern
+                                            oder
+                                            Subunternehmern im Rahmen des Auftrags erbracht werden,
+                                            ausgeschlossen.
+                                            <br/>
+                                            <strong>6.</strong>
+                                            Unsere
+                                            Haftung erstreckt sich nur auf die bedingungsgemäße Ausführung, wenn
+                                            eine
+                                            Ware
+                                            aufgrund von
+                                            Modellen, Zeichnungen, Konstruktionsangaben und sonstigen
+                                            Spezifikationen
+                                            des
+                                            Käufers
+                                            angefertigt werden.
+                                            <br/>
+                                            <strong>7.</strong>
+                                            Der Beweis der leichten oder groben Fahrlässigkeit hat der Käufer zu
+                                            erbringen,
+                                            sofern es sich nicht um ein Verbrauchergeschäft handelt.
+                                            <br/>
+                                            <strong>8.</strong>
+                                            Für den Fall, dass Vertragsstrafen vereinbart wurden, sind
+                                            darüberhinausgehende
+                                            Ansprüche aus dem jeweiligen Titel
+                                            ausgeschlossen.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                K. Datenschutz
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Der Vertragspartner erteilt seine Zustimmung, dass in der
+                                            gegenständlichen
+                                            Geschäftsbeziehung bekannt gewordenen Daten zum Zwecke von
+                                            Werbemaßnahmen,
+                                            betriebswirtschaftlichen Vergleichen und Bonitätsbeurteilungen
+                                            automationsunterstützt
+                                            gespeichert, übermittelt und weiterverarbeitet werden. Der
+                                            Vertragspartner
+                                            ist
+                                            ohne
+                                            Einfluss
+                                            auf das bestehende Vertragsverhältnis berechtigt, die Einwilligung
+                                            zur
+                                            Datenübermittlung
+                                            jederzeit schriftlich zu widerrufen.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Der Vertragspartner ist einverstanden von der ecoNG GmbH
+                                            Produktinformationen
+                                            telefonisch oder auf elektronischem Weg zu erhalten. Dieses
+                                            Einverständnis
+                                            kann
+                                            jederzeit
+                                            schriftlich widerrufen werden.
+                                            <strong>3.</strong>
+                                            Adressänderungen müssen durch den Vertragspartner bis zur
+                                            beiderseitigen,
+                                            vollständigen Erfüllung des Rechtsgeschäftes bekanntgegeben werden.
+                                            Sämtliche
+                                            Korrespondenz
+                                            an die zuletzt bekanntgegebene Zustelladresse gilt als zugegangen,
+                                            wenn die
+                                            Mitteilung einer
+                                            Adressänderung unterbleibt.
+                                            <br/>
+                                            <strong>4.</strong>
+                                            Der Vertragspartner ist ausdrücklich einverstanden, dass seine Daten
+                                            im
+                                            Rahmen
+                                            der
+                                            Bonitätsprüfung zu diesem ausschließlichen Zwecke an staatlich
+                                            bevorrechtete
+                                            Gläubigerschutzverbände, wie etwa den Kreditschutzverband von 1870
+                                            (KSV),
+                                            den
+                                            Insolvenzschutzverband für Arbeitnehmer oder Arbeitnehmerinnen
+                                            (ISA), den
+                                            Österreichischen
+                                            Verband Creditreform (ÖVC) und den Alpenländischen Kreditorenverband
+                                            (AKV)
+                                            übermittelt
+                                            werden dürfen.
+                                            <br/>
+                                            <strong>5.</strong>
+                                            Wir verpflichten uns bei der Abarbeitung unserer Aufträge immer
+                                            aktuelle
+                                            Spyware-Programme, Firewalls und Virenschutz zu verwenden. Darüber
+                                            hinaus
+                                            übernehmen
+                                            wir
+                                            keine Haftung für das Auftreten von Viren und/ oder anderen Spyware
+                                            und
+                                            Schadprogrammen.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                L. Urheberrecht
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Sämtliche Inhalte der Webseite sowie Layout und Gestaltung sind
+                                            urheberrechtlich
+                                            geschützt. Die Vervielfältigung oder Übernahme von Bestandteilen der
+                                            Webseite,
+                                            insbesondere
+                                            von Texten, Textteilen, Bildmaterial oder grafischen Darstellungen
+                                            bedarf
+                                            unserer
+                                            vorherigen
+                                            schriftlichen Zustimmung. Wir sind um stetige Aktualisierung und
+                                            Überprüfung
+                                            der
+                                            Inhalte der
+                                            Webseite bemüht. Es wird jedoch keine Haftung für Vollständigkeit,
+                                            Richtigkeit
+                                            und
+                                            Aktualität übernommen. Gleiches gilt auch für Webseiten, auf die
+                                            mittels
+                                            Hyperlinks
+                                            verwiesen wird. Jegliche Verbindungsherstellung zu derartigen
+                                            Webseiten
+                                            erfolgt
+                                            auf
+                                            eigene
+                                            Gefahr.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Sämtliche Pläne, Skizzen und sonstige technische Unterlagen bleiben
+                                            ebenso
+                                            wie
+                                            Muster, Kataloge, Prospekte, Abbildungen und dergleichen stets unser
+                                            geistiges
+                                            Eigentum
+                                            unter Schutz der einschlägigen gesetzlichen Bestimmungen
+                                            hinsichtlich
+                                            Vervielfältigung,
+                                            Nachahmung, Wettbewerb, etc. Der Vertragspartner erhält daran keine
+                                            wie
+                                            immer
+                                            gearteten
+                                            Nutzungs- oder Verwertungsrechte.
+                                            <br/>
+                                            <strong>3.</strong>
+                                            Werden durch den Vertragspartner geistige Schöpfungen oder
+                                            unterlagen
+                                            Dritter
+                                            eingebracht und macht ebenjener Dritter Schutzrechts geltend, sind
+                                            wir
+                                            berechtigt
+                                            auf Risiko
+                                            des Vertragspartners die Auftragsausführung bis zur Klärung der
+                                            Rechte
+                                            Dritter
+                                            einzustellen.
+                                            Darüber hinaus sind wir berechtigt, Kostenersatz für die notwendigen
+                                            und
+                                            zweckentsprechenden
+                                            Kosten sowie Kostenvorschüsse für Prozesskosten zu fordern.
+                                            Diesbezüglich
+                                            hält
+                                            uns
+                                            der
+                                            Vertragspartner schad und klaglos.
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>
+                                                M. Rechtswahl, Gerichtsstand
+                                            </strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Es gilt ausschließlich österreichisches Recht. Die Anwendbarkeit der
+                                            Kollisionsnormen und des UN Kaufrechts wird ausdrücklich
+                                            ausgeschlossen.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Ausschließlicher Gerichtsstand ist das am Sitz unserer Firma örtlich
+                                            und
+                                            sachlich
+                                            zuständige Gericht (gilt nicht für Verbrauchergeschäfte).
+                                        </p>
+                                        <p style="text-align: justify; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
+                                            <strong>N. Änderungen an den AGB, Salvatorische Klausel</strong>
+                                            <br/>
+                                            <strong>1.</strong>
+                                            Änderungen an den hier genannten Allgemeinen Geschäftsbedingungen
+                                            bleiben
+                                            vorbehalten. Diese müssen jedoch dem Vertragspartner innerhalb
+                                            angemessener
+                                            Frist
+                                            von
+                                            mindestens zwei Wochen nach deren Erscheinen mitgeteilt werden.
+                                            <br/>
+                                            <strong>2.</strong>
+                                            Sollte eine Bestimmung dieser AGB ganz oder teilweise unwirksam sein
+                                            oder
+                                            werden,
+                                            so bleibt hiervon die Rechtswirksamkeit
+                                            der übrigen Bestimmungen unberührt.
+                                            Anstelle
+                                            einer
+                                            etwa unwirksamen Bestimmung gilt als vereinbart, was dieser in
+                                            rechtlich
+                                            zulässiger
+                                            Weise am
+                                            nächsten kommt.
+                                        </p>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
