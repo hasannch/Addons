@@ -9,7 +9,7 @@
                             <t t-foreach="docs" t-as="o">
                                 <t t-call="custom_report.new_header_template_id">
                                     <div class="page"
-                                         style="padding-left: 20px; padding-right: 20px;">
+                                         style="padding-left: 2.5cm; padding-right: 2.5cm; font-size: 9.5pt">
                                         <div style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
                                             <div style="display: flex; flex-direction: row; width: 48%;">
                                                 <strong>
@@ -30,6 +30,8 @@
                                             </div>
                                             <div style="display: flex; width: 100%; text-align: right; margin-top: -132px; ">
                                                 <div style="text-align: left; float: right;">
+                                                    <br/>
+                                                    <br/>
                                                     <strong>Customer Address:</strong>
                                                     <div t-field="o.partner_id"
                                                          t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
@@ -310,9 +312,10 @@
                                                 </span>
                                             </p>
                                         </div>
-                                        <div style="margin-bottom: 100px;"/>
+                                        <div style="page-break-after: always;"/>
+                                        <!--                                        <div style="margin-bottom: 100px;"/>-->
                                         <div style="font-size: 9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000;">
-                                            <h4 class="text-center">Terms and Conditions</h4>
+                                            <!--                                            <h4 class="text-center">Terms and Conditions</h4>-->
                                             <p style="text-align: justify; font-size:9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 25px;">
                                                 <p style="text-align: justify; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
                                                     <strong>
@@ -918,7 +921,8 @@
                                                     Behördenwegen wie Genehmigungen oder Förderansuchen unterstützend
                                                     zur
                                                     Verfügung.
-                                                    <br/><strong>10. </strong>
+                                                    <br/>
+                                                    <strong>10.</strong>
                                                     Wir beraten den Vertragspartner unverbindlich bezüglich Förderungen,
                                                     Stromlieferung,
                                                     Strombezug etc. Wir geben die nach unserem Wissenstand bestmögliche

@@ -8,11 +8,11 @@
                     <img t-att-src="'/custom_report/static/src/eco_ng_header.png'"
                          style="max-height:150pt;max-width:150%"/>
                 </div>
-                <div class="row mb8" style="border-bottom: 2px solid #E1e3e4;">
+                <div class="row mb8" style="border-bottom: 2px solid #E1e3e4; margin-top: 15px">
                     <div class="col-6">
                         <div name="company_address" class="float-end mb4">
                             <ul class="list-unstyled text-right" style="float: left; width: 100;">
-                                <li style="text-align: left; padding-left:20px;  margin-bottom: -15px;">
+                                <li style="text-align: left; padding-left:2.5cm;  margin-bottom: -15px;">
                                     <div style="padding-top: 160px;"/>
                                     <t t-if="o.company_id.street">
                                         <span t-field="o.company_id.street"/>
@@ -37,8 +37,9 @@
                         </div>
                     </div>
                     <div class="col-6 text-end mb4">
+<!--                             style="max-height:150pt;max-width:150%; margin-top:5px; margin-bottom: -15px;"-->
                         <img t-att-src="image_data_uri(o.company_id.logo)"
-                             style="max-height:150pt;max-width:150%; margin-top:5px; margin-bottom: -15px;"
+                             style="max-height:150pt;max-width:150%; margin-top:0px; padding-right: 60px; margin-bottom: -15px;"
                              alt="Company Logo"/>
                     </div>
                 </div>
@@ -51,41 +52,41 @@
             <div class="footer" style="font-size: 9.5pt;">
                 <table width="100%" class="table-borderless">
                     <tr style="border-top: 2px solid #E1e3e4;">
-                        <td width="25%" style="padding-left:20px; padding-top: 5px;">eco-NG GmbH</td>
+                        <td width="25%" style="padding-left:2.5cm; padding-top: 5px;">eco-NG GmbH</td>
                         <td width="25%" style="padding-left:20px; padding-top: 5px;">0043 720 145 007
                         </td>
-                        <td width="25%" style="padding-left:40px; padding-top: 5px;">USt: ATU80342318
+                        <td width="20%" style="padding-left:0px; padding-top: 5px;">USt: ATU80342318
                         </td>
-                        <td width="25%" style="padding-left:30px; padding-top: 5px;">Oberbank</td>
+                        <td width="30%" style="padding-left:0px; padding-top: 5px; padding-right:2.5cm;">Oberbank</td>
                     </tr>
                     <tr>
-                        <td width="25%" style="padding-left:20px;">Taschelried 19</td>
+                        <td width="25%" style="padding-left:2.5cm;">Taschelried 19</td>
                         <td width="25%" style="padding-left:20px;">office@eco -ng.com
                         </td>
-                        <td width="25%" style="padding-left:40px;">FN Nr: 621034 k
+                        <td width="20%" style="padding-left:0px;">FN Nr: 621034 k
                         </td>
-                        <td width="25%" style="padding-left:30px;">IBAN: AT19 1500 0009 2127
+                        <td width="30%" style="padding-left:0px; padding-right:2.5cm;">IBAN:
                         </td>
                     </tr>
                     <tr>
-                        <td width="25%" style="padding-left:20px;">4400 Steyr</td>
+                        <td width="25%" style="padding-left:2.5cm;">4400 Steyr</td>
                         <td width="25%" style="padding-left:20px;">www.eco-ng.com
                         </td>
-                        <td width="25%" style="padding-left:40px;">
+                        <td width="20%" style="padding-left:0px;">
                         </td>
-                        <td width="25%" style="padding-left:30px;">6572</td>
+                        <td width="30%" style="padding-left:0px; padding-right:2.5cm;">AT19 1500 0009 2127 6572</td>
                     </tr>
                     <tr>
-                        <td width="25%" style="padding-left:20px;">Österreich</td>
+                        <td width="25%" style="padding-left:2.5cm;">Österreich</td>
                         <td width="25%" style="padding-left:20px;">Landesgericht Steyr
                         </td>
-                        <td width="25%" style="padding-left:40px;">
+                        <td width="20%" style="padding-left:0px;">
                         </td>
-                        <td width="25%" style="padding-left:30px;">BIC: OBKLAT2L</td>
+                        <td width="30%" style="padding-left:0px; padding-right:2.5cm;">BIC: OBKLAT2L</td>
                     </tr>
                 </table>
                 <br/>
-                <div t-if="report_type == 'pdf'" style="text-align: right;">
+                <div t-if="report_type == 'pdf'" style="text-align: right; padding-right:2.5cm;">
                     Page:
                     <span class="page"/>
                     /
@@ -100,7 +101,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="custom_report.new_header_template_id">
                         <t t-set="o" t-value="o.with_context(lang=lang)"/>
-                        <div style="width:100%; float:left; padding-left:20px">
+                        <div style="width:100%; float:left; padding-left:2.5cm; font-size: 9.5pt">
                             <span t-field="o.partner_id.name"/>
                             <br/>
                             <span t-field="o.partner_id.street"/>
@@ -117,8 +118,8 @@
                             </t>
                             <br/>
                         </div>
-                        <div class="mt-5 clearfix" style="padding-left: 20px; padding-right: 20px;">
-                            <div class="page">
+                        <div class="mt-5 clearfix" style="padding-left: 2.5cm; padding-right: 2.5cm;">
+                            <div class="page" style="font-size: 9.5pt">
                                 <br/>
                                 <br/>
                                 <br/>
@@ -556,9 +557,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div style="margin-bottom: 100px;"/>
+                                <div style="page-break-after: always;"/>
+<!--                                <div style="margin-bottom: 100px;"/>-->
                                 <div style="font-size: 9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000;">
-                                    <h4 class="text-center">Terms and Conditions</h4>
+<!--                                    <h4 class="text-center">Terms and Conditions</h4>-->
                                     <p style="text-align: justify; font-size:9.5pt; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 25px;">
                                         <p style="text-align: justify; font-family: 'NimbusSans-Regular', sans-serif; color: #000000; margin-bottom: 5px; 20px; line-height: 1;">
                                             <strong>
