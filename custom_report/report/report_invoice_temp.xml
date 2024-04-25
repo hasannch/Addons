@@ -178,7 +178,7 @@
                                          t-if="o.invoice_date" name="invoice_date">
                                         <t t-if="o.move_type == 'out_invoice'">
                                             <strong>
-                                                <font style="color: rgb(37, 150, 190);">Invoice Date:</font>
+                                                <font style="color: rgb(37, 150, 190);">Rechnungsdatum:</font>
                                             </strong>
                                         </t>
                                         <t t-elif="o.move_type == 'out_refund'">
@@ -212,7 +212,7 @@
                                     <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
                                          t-if="o.delivery_date" name="delivery_date">
                                         <strong>
-                                            <font style="color: rgb(37, 150, 190);">Delivery Date:</font>
+                                            <font style="color: rgb(37, 150, 190);">Lieferdatum:</font>
                                         </strong>
                                         <br/>
                                         <span t-field="o.delivery_date">2023-09-25</span>
@@ -220,7 +220,7 @@
                                     <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2"
                                          t-if="o.invoice_origin" name="origin">
                                         <strong>
-                                            <font style="color: rgb(37, 150, 190);">Source:</font>
+                                            <font style="color: rgb(37, 150, 190);">Auftragsnummer:</font>
                                         </strong>
                                         <br/>
                                         <span t-field="o.invoice_origin">SO123</span>
@@ -263,17 +263,17 @@
                                     <thead>
                                         <tr style="border-bottom:1px solid black;">
                                             <th name="th_sequence" class="text-start">
-                                                <font style="color: rgb(37, 150, 190);">Seq.</font>
+                                                <font style="color: rgb(37, 150, 190);">Pos.</font>
                                             </th>
                                             <th name="th_description" class="text-start">
                                                 <span>
-                                                    <font style="color: rgb(37, 150, 190);">Description
+                                                    <font style="color: rgb(37, 150, 190);">Beschreibung
                                                     </font>
                                                 </span>
                                             </th>
                                             <th name="th_quantity" class="text-end">
                                                 <span>
-                                                    <font style="color: rgb(37, 150, 190);">Quantity</font>
+                                                    <font style="color: rgb(37, 150, 190);">Menge</font>
                                                 </span>
                                             </th>
                                             <th name="th_uom" class="text-start">
@@ -284,7 +284,7 @@
                                             <th name="th_priceunit"
                                                 t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                                 <span>
-                                                    <font style="color: rgb(37, 150, 190);">Unit Price
+                                                    <font style="color: rgb(37, 150, 190);">Einzelpreis
                                                     </font>
                                                 </span>
                                             </th>
@@ -297,12 +297,12 @@
                                             <th name="th_taxes"
                                                 t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                                                 <span>
-                                                    <font style="color: rgb(37, 150, 190);">Taxes</font>
+                                                    <font style="color: rgb(37, 150, 190);">Steuer</font>
                                                 </span>
                                             </th>
                                             <th name="th_subtotal" class="text-end">
                                                 <span>
-                                                    <font style="color: rgb(37, 150, 190);">Amount</font>
+                                                    <font style="color: rgb(37, 150, 190);">Gesamtbetrag</font>
                                                 </span>
                                             </th>
                                         </tr>

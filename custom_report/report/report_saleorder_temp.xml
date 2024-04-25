@@ -132,17 +132,17 @@
                                             <thead style="display: table-row-group;">
                                                 <tr style=" border-bottom: 1px solid black;">
                                                     <th name="th_sequence" class="text-start">
-                                                        <font style="color: rgb(37, 150, 190);">Seq.
+                                                        <font style="color: rgb(37, 150, 190);">Pos.
                                                         </font>
                                                     </th>
                                                     <th name="th_description" class="text-start">
                                                         <font style="color: rgb(37, 150, 190);">
-                                                            Description
+                                                            Beschreibung
                                                         </font>
                                                     </th>
                                                     <th name="th_quantity" class="text-end">
                                                         <font style="color: rgb(37, 150, 190);">
-                                                            Quantity
+                                                            Menge
                                                         </font>
                                                     </th>
                                                     <th name="th_uom" class="text-start">
@@ -163,13 +163,13 @@
                                                         </span>
                                                     </th>
                                                     <th name="th_taxes" class="text-end">
-                                                        <font style="color: rgb(37, 150, 190);">Taxes
+                                                        <font style="color: rgb(37, 150, 190);">Steuer
                                                         </font>
                                                     </th>
                                                     <th name="th_subtotal" class="text-end">
                                                         <span>
                                                             <font style="color: rgb(37, 150, 190);">
-                                                                Amount
+                                                                Gesamtbetrag
                                                             </font>
                                                         </span>
                                                     </th>
