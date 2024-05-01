@@ -31,6 +31,37 @@ class OdooRestful(http.Controller):
         response = {'status': 200, 'response': partners_data, 'message': 'Success'}
         return response
 
+    @http.route(route='/student/balance', type='json', auth='user')
+    def read_student(self, **kwargs):
+        # Extracting query parameters
+        # domain = []
+        # data = json.loads(request.httprequest.data.decode('utf-8'))
+        # params = data.get('params', {})
+
+
+        part = kwargs.get('student_id')
+
+        # Search for records based on the domain
+        partner = request.env['res.partner'].sudo().search([('student_id', '=', part)], limit=1)
+
+        records = request.env['account.move.line'].sudo().search([('partner_id', '=',partner.id)])
+
+        # Preparing response data
+        products_data = []
+        for record in records:
+            data = {
+                'student_name': record.partner_id.name,
+                'name': record.name,
+                'debit': record.debit,
+                'credit': record.credit,
+                'date': record.date.strftime('%Y-%m-%d'),
+                'balance': record.balance,  # assuming balance calculation
+            }
+            products_data.append(data)
+
+        response = {'status': 200, 'response': products_data, 'message': 'Success'}
+        return response
+
     # create customer Api
 
     @http.route('/create/customer', type='json', methods=['POST'], auth='user')
@@ -45,18 +76,24 @@ class OdooRestful(http.Controller):
             email = params.get('email')
             student_id = params.get('student_id')
             # company_type = params.get('company_type', "company")
+            student = request.env['res.partner'].sudo().search([('student_id', '=',student_id)], limit=1)
+            if not student:
 
-            new_customer = request.env['res.partner'].sudo().create({
-                'name': name,  # Combining name and last name for the full name
-                # 'last_name': last_name,
-                'student_id': student_id,
-                # 'student_department_id': student_department_id,
-                # 'company_type': company_type,
-                'email': email,
-            })
+
+                new_customer = request.env['res.partner'].sudo().create({
+                    'name': name,  # Combining name and last name for the full name
+                    # 'last_name': last_name,
+                    'student_id': student_id,
+                    # 'student_department_id': student_department_id,
+                    # 'company_type': company_type,
+                    'email': email,
+                })
 
             # Successful creation response
-            return {'success': True, 'message': 'Customer created successfully', 'id': new_customer.id}
+                return {'success': True, 'message': 'Customer created successfully', 'id': new_customer.id}
+            else:
+                return {'success': True, 'message': 'Already Exist',}
+
 
         except Exception as e:
             _logger.error("Failed to create customer: %s", str(e))
@@ -207,8 +244,12 @@ class OdooRestful(http.Controller):
             params = data.get('params', {})
             invoice = params.get('invoice_line_ids', [])
             # Your logic here...
+            part = params.get('student_id')
+
+            # Search for records based on the domain
+            partner = request.env['res.partner'].sudo().search([('student_id', '=', part)], limit=1)
             invoice_data = {
-                'partner_id': int(params.get('partner_id')),
+                'partner_id': partner.id,
                 'invoice_date': params.get('invoice_date'),
                 'move_type': 'out_invoice',
             }
@@ -223,6 +264,7 @@ class OdooRestful(http.Controller):
             invoice_data['invoice_line_ids'] = invoice_lines
 
             new_invoice = request.env['account.move'].sudo().create(invoice_data)
+            # new_invoice.action_post()
             return {
                 'status': 200,
                 'message': 'Invoice created successfully',
@@ -371,7 +413,7 @@ class OdooRestful(http.Controller):
         activity_ids = kwargs.get('activity_ids',[])
         state = kwargs.get('state', 'pending')  # Default state as 'pending' if not specified
 
-  
+
         try:
             # Create a new payment record
             new_payment = http.request.env['account.payment'].sudo().create({
@@ -392,6 +434,7 @@ class OdooRestful(http.Controller):
         except Exception as e:
             # General exception catch if something unexpected occurs
             return {'success': False, 'message': 'An unexpected error occurred: {}'.format(str(e))}
+
 
 
 
