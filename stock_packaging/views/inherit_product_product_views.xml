@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Stock Report View -->
+        <record model="ir.ui.view" id="product_product_stock_tree_inherit_stock_report">
+            <field name="name">product.product.stock.tree.inherit.stock.report</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+            <field name="arch" type="xml">
+                <field name="qty_available" position="after">
+                    <field name="packaging_qty" />
+                </field>
+            </field>
+        </record>
+   </data>
+</odoo>
