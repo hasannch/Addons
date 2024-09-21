@@ -1,0 +1,55 @@
+<odoo>
+    <!--  STANDARD Layout  -->
+    <!--  Inherited the standard external layout for changing company address position  -->
+    <template id="custom_standard_external_layout" inherit_id="web.external_layout_standard">
+        <!--    Report header    -->
+        <xpath expr="//div[1]" position="replace">
+            <t t-foreach="docs" t-as="o">
+                <div class="header">
+                    <div class="row" style="border-bottom:2px solid black;">
+                        <div class="col-6">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                                 style="height:110px;width:370px;"/>
+                        </div>
+                        <div class="col-2"/>
+                        <div class="col-4">
+                            <p style="font-size:25px;margin-top:200px;text-align:center;">
+                                <span t-esc="o.company_id.name" style="text-align:center;"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+        <!--             report footer -->
+        <xpath expr="//div[@t-attf-class='footer o_standard_footer o_company_#{company.id}_layout']" position="replace">
+            <div class="footer">
+                <div class="row" style="height:70px;"/>
+                <table width="100%" class="table-borderless">
+                    <tr style="border-top:1px solid black;">
+                        <td width="30%">Herr Informatik GmbH </td>
+                        <td width="40%">(c) 2005 by Herr Informatik GmbH
+                        </td>
+                        <td width="30%" style="text-align:right;">Tel. +41 56 460 00 60</td>
+                    </tr>
+                    <tr>
+                        <td width="30%">Aarauerstrasse 51</td>
+                        <td width="40%"></td>
+                        <td width="30%"></td>
+                    </tr>
+                    <tr>
+                        <td width="30%">5200 Brugg</td>
+                        <td width="40%" style="text-align:center;">
+
+                            <span class="page"/>
+                            /
+                            <span class="topage"/>
+                        </td>
+                        <td width="30%" style="text-align:right;">E-Mail Info@herr-informatik.ch</td>
+                    </tr>
+                </table>
+            </div>
+
+        </xpath>
+    </template>
+</odoo>
